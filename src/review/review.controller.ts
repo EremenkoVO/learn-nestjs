@@ -1,6 +1,9 @@
 import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
 import { ReviewModel } from './review.model';
 
+/**
+ * Контроллер для управления ревью
+ */
 @Controller('review')
 export class ReviewController {
   /**
