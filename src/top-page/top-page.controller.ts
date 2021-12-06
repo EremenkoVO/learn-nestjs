@@ -8,6 +8,7 @@ import {
   Patch,
   Post,
 } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { TopPageModel } from 'src/top-page/top-page.model';
 import { FindTopPagesDto } from './dto/find-top-pages.dto';
 
@@ -16,6 +17,10 @@ import { FindTopPagesDto } from './dto/find-top-pages.dto';
  */
 @Controller('top-page')
 export class TopPageController {
+  constructor(private readonly configService: ConfigService) {
+    this.configService.get('TEST');
+  }
+
   /**
    * Создание страницы
    * @param dto модель страницы
