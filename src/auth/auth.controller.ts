@@ -8,12 +8,14 @@ import { AuthDto } from './dto/auth.dto';
 export class AuthController {
   /**
    * Регистрация пользователя
+   * @param dto dto пользователя
    */
   @Post('register')
   async register(@Body() dto: AuthDto) {}
 
   /**
    * Авторизация
+   * @param dto dto пользователя
    */
   @HttpCode(200)
   @Post('login')
