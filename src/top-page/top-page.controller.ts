@@ -17,10 +17,6 @@ import { FindTopPagesDto } from './dto/find-top-pages.dto';
  */
 @Controller('top-page')
 export class TopPageController {
-  constructor(private readonly configService: ConfigService) {
-    this.configService.get('TEST');
-  }
-
   /**
    * Создание страницы
    * @param dto модель страницы
