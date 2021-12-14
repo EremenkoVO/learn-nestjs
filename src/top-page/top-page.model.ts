@@ -8,7 +8,7 @@ export enum TopLevelCategory {
   Products,
 }
 
-export class hhData {
+export class HhData {
   @prop()
   count: number;
 
@@ -47,18 +47,10 @@ export class TopPageModel extends TimeStamps {
   @prop()
   category: string;
 
-  @prop({
-    type: () => {
-      hhData;
-    },
-  })
-  hh?: hhData;
+  @prop({ type: () => HhData })
+  hh?: HhData;
 
-  @prop({
-    type: () => {
-      [TopPageAdvantage];
-    },
-  })
+  @prop({ type: () => [TopPageAdvantage] })
   advantages: TopPageAdvantage[];
 
   @prop()
@@ -67,10 +59,6 @@ export class TopPageModel extends TimeStamps {
   @prop()
   tagsTitle: string;
 
-  @prop({
-    type: () => {
-      [String];
-    },
-  })
+  @prop({ type: () => [String] })
   tags: string[];
 }
