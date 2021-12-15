@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
-import { AppModule } from './../src/app.module';
+import { AppModule } from '../src/app.module';
 import { CreateReviewDto } from 'src/review/dto/create-review.dto';
 import { disconnect, Types } from 'mongoose';
 
@@ -28,7 +28,7 @@ describe('AppController (e2e)', () => {
     await app.init();
   });
 
-  it('/review/create (POST)', async (done) => {
+  it('/review/create (POST) - success', async (done) => {
     return request(app.getHttpServer())
       .post('/review/create')
       .send(testDto)
@@ -36,6 +36,17 @@ describe('AppController (e2e)', () => {
       .then(({ body }: request.Response) => {
         createdId = body._id;
         expect(createdId).toBeDefined();
+        done();
+      });
+  });
+
+  it('/review/create (POST) - fail', async (done) => {
+    return request(app.getHttpServer())
+      .post('/review/create')
+      .send({ ...testDto, rating: 0 })
+      .expect(400)
+      .then(({ body }: request.Response) => {
+        console.log(body);
         done();
       });
   });
