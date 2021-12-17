@@ -4,48 +4,62 @@ import {
   Delete,
   Get,
   HttpCode,
+  NotFoundException,
   Param,
   Patch,
   Post,
+  UsePipes,
+  ValidationPipe,
 } from '@nestjs/common';
+import { IdValidationPipe } from 'src/pipes/ad-validation.pipe';
+import { CreateProductDto } from './dto/create-product.dto';
 import { FindProductDto } from './dto/find-product.dto';
+import { PRODUCT_NOT_FOUND_ERROR } from './product.constants';
 import { ProductModel } from './product.model';
+import { ProductService } from './product.service';
 
-/**
- * Контроллер для продуктов
- */
 @Controller('product')
 export class ProductController {
-  /**
-   * Создание продукта
-   * @param dto модель продукта
-   */
+  constructor(private readonly productService: ProductService) {}
+
   @Post('create')
-  async create(@Body() dto: Omit<ProductModel, '_id'>) {}
+  async create(@Body() dto: CreateProductDto) {
+    return this.productService.create(dto);
+  }
 
-  /**
-   * Получение продукта
-   * @param id id продукта
-   */
   @Get(':id')
-  async get(@Param('id') id: string) {}
+  async get(@Param('id', IdValidationPipe) id: string) {
+    const product = await this.productService.findById(id);
+    if (!product) {
+      throw new NotFoundException(PRODUCT_NOT_FOUND_ERROR);
+    }
+    return product;
+  }
 
-  /**
-   * Удаление продукта
-   * @param id id продукта
-   */
   @Delete(':id')
-  async delete(@Param('id') id: string) {}
+  async delete(@Param('id', IdValidationPipe) id: string) {
+    const deletedProduct = await this.productService.deleteById(id);
+    if (!deletedProduct) {
+      throw new NotFoundException(PRODUCT_NOT_FOUND_ERROR);
+    }
+  }
 
-  /**
-   * Обновление текущего продукта
-   * @param id id продукта
-   * @param dto модель продукта
-   */
   @Patch(':id')
-  async patch(@Param('id') id: string, @Body() dto: ProductModel) {}
+  async patch(
+    @Param('id', IdValidationPipe) id: string,
+    @Body() dto: ProductModel,
+  ) {
+    const updatedProduct = await this.productService.updateById(id, dto);
+    if (!updatedProduct) {
+      throw new NotFoundException(PRODUCT_NOT_FOUND_ERROR);
+    }
+    return updatedProduct;
+  }
 
+  @UsePipes(new ValidationPipe())
   @HttpCode(200)
-  @Post()
-  async find(@Body() dto: FindProductDto) {}
+  @Post('find')
+  async find(@Body() dto: FindProductDto) {
+    return this.productService.findWithReviews(dto);
+  }
 }

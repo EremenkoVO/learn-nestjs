@@ -15,19 +15,16 @@ export class ProductModel extends TimeStamps {
   image: string;
 
   @prop()
-  titel: string;
+  title: string;
 
   @prop()
   price: number;
 
   @prop()
-  oldPrice: number;
+  oldPrice?: number;
 
   @prop()
   credit: number;
-
-  @prop()
-  calculatedRating: number;
 
   @prop()
   description: string;
@@ -42,8 +39,8 @@ export class ProductModel extends TimeStamps {
   categories: string[];
 
   @prop({ type: () => [String] })
-  tags: string;
+  tags: string[];
 
   @prop({ type: () => [ProductCharacteristic], _id: false })
-  characteristics: ProductCharacteristic;
+  characteristics: ProductCharacteristic[];
 }
